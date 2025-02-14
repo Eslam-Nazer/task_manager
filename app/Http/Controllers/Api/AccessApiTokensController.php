@@ -44,18 +44,13 @@ class AccessApiTokensController extends Controller
         $user = Auth::guard('sanctum')->user();
 
         if (null == $token) {
-            $user->currentAccessToken->delete();
+            $user->currentAccessToken()->delete();
             return response()->json([
                 'message'   => "You are logged out"
             ], HttpFoundationResponse::HTTP_NO_CONTENT);
         }
         $personalAccessToken = PersonalAccessToken::findToken($token);
-        if (null == $personalAccessToken) {
-            $user->tokens()->delete();
-            return response()->json([
-                'message'   => "You are logged out"
-            ], HttpFoundationResponse::HTTP_NO_CONTENT);
-        }
+
         if (
             $user->id == $personalAccessToken->tokenable_id
             && get_class($user) == $personalAccessToken->tokenable_type

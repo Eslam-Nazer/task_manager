@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Enum\StatusEnum;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Task\CreateRequest;
 use App\Http\Requests\Task\UpdateRequest;
 
@@ -34,8 +33,7 @@ class TaskController extends Controller
      */
     public function store(CreateRequest $request)
     {
-        // dd($request->all());
-        Task::create($request->all());
+        Task::create($request->validated());
         return redirect()->route("dashboard")->with("success", "Task created successfully");
     }
 
