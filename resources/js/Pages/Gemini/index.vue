@@ -1,9 +1,15 @@
 <script setup>
 import ChatLayout from '@/Layouts/GeminiLayout.vue';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, Link } from '@inertiajs/vue3';
+import ChatContent from '@/Components/ChatContent.vue';
+
+const props = defineProps({
+    messages: Array,
+    chat: null | Object,
+});
 
 const form = useForm({
-    promt: '',
+    prompt: '',
 });
 
 const submit = () => {
@@ -12,8 +18,34 @@ const submit = () => {
 </script>
 <template>
     <ChatLayout>
-        <template #aside> </template>
+        <template #aside>
+            <ul class="p-2">
+                <template v-for="message in messages" :key="message.id">
+                    <li
+                        class="my-2 flex justify-between rounded-lg bg-slate-900 px-4 py-2 font-semibold text-slate-400 duration-200 hover:bg-slate-700"
+                    >
+                        <Link :href="route('gemini', message.id)">
+                            {{ message.context.infromation.prompt }}
+                        </Link>
+                    </li>
+                </template>
+            </ul>
+        </template>
         <div class="flex w-full text-white"></div>
+        <template v-if="chat">
+            <div class="flex h-screen w-full bg-slate-900">
+                <div class="w-full overflow-auto">
+                    <template
+                        v-for="(contect, index) in chat?.context"
+                        :key="index"
+                    >
+                        <ChatContent :content="contect" />
+                    </template>
+
+                    <!-- {{ contect }} -->
+                </div>
+            </div>
+        </template>
         <template #form>
             <section class="top-0 px-6">
                 <div class="w-full">
@@ -22,7 +54,7 @@ const submit = () => {
                             type="text"
                             class="w-full rounded-lg bg-slate-700 text-white"
                             placeholder="Ask laravel gemini"
-                            v-model="form.promt"
+                            v-model="form.prompt"
                             @keyup.enter="submit"
                         />
                         <div

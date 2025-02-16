@@ -22,7 +22,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'promt' => ['required', 'string'],
+            'prompt' => ['required', 'string'],
         ];
     }
 }

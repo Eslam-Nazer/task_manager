@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Gemini;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,6 +15,21 @@ class GeminiAi extends Model
      * @use SoftDeletes<\Illuminate\Database\Eloquent\SoftDeletes>
      */
     use SoftDeletes;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        if (!app()->runningInConsole()) {
+            static::creating(function ($gemini) {
+                $gemini->user_id = Auth::id();
+            });
+
+            static::updating(function ($gemini) {
+                $gemini->user_id = Auth::id();
+            });
+        }
+    }
 
     /**
      * Summary of table
@@ -49,18 +65,18 @@ class GeminiAi extends Model
 
     /**
      * Summary of scopeGemini
-     * @param string $promt
+     * @param string $prompt
      * @return Gemini\Responses\GenerativeModel\GenerateContentResponse|array
      */
-    public function scopeGemini(string $promt, bool $parts = false): GenerateContentResponse|array
+    public static function Gemini(string $prompt, bool $parts = false): GenerateContentResponse|array
     {
         $key = getenv('GEMINI_API_KEY');
         $client = Gemini::client($key);
 
         if ($parts) {
-            return $client->geminiPro()->generateContent($promt)->parts();
+            return $client->geminiPro()->generateContent($prompt)->parts();
         }
 
-        return $client->geminiPro()->generateContent($promt);
+        return $client->geminiPro()->generateContent($prompt);
     }
 }

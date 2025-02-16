@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ProfileController;
@@ -27,11 +26,8 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/chat/gemini/{id?}', [GeminiController::class, 'index'])->name('gemini');
-    Route::post('/chat/gemini', [GeminiController::class, 'store'])->name("gemini-store");
+    Route::post('/chat/gemini/{id?}', [GeminiController::class, 'store'])->name("gemini-store");
 });
 
-// Route::get('/test', function () {
-//     return Inertia::render('Dashboard');
-// })->name('test');
 
 require __DIR__ . '/auth.php';
