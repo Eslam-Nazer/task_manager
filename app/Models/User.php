@@ -60,4 +60,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class, "user_id");
     }
+
+    public function gemini()
+    {
+        return $this->hasMany(GeminiAi::class, "user_id");
+    }
 }

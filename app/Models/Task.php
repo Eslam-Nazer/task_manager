@@ -22,13 +22,15 @@ class Task extends Model
     {
         parent::boot();
 
-        static::creating(function ($task) {
-            $task->user_id = Auth::id();
-        });
+        if (!app()->runningInConsole()) {
+            static::creating(function ($task) {
+                $task->user_id = Auth::id();
+            });
 
-        static::updating(function ($task) {
-            $task->user_id = Auth::id();
-        });
+            static::updating(function ($task) {
+                $task->user_id = Auth::id();
+            });
+        }
     }
 
     /**
