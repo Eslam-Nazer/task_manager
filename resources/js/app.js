@@ -2,12 +2,14 @@ import '../css/app.css';
 import './bootstrap';
 
 import { createInertiaApp } from '@inertiajs/vue3';
+import Alpine from 'alpinejs';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+Alpine.start();
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
