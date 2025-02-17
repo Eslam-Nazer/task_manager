@@ -57,4 +57,15 @@ class GeminiController extends Controller
         );
         return redirect()->route('gemini', $id);
     }
+
+    /**
+     * Summary of destroy
+     * @param \App\Models\GeminiAi $chat
+     * @return RedirectResponse
+     */
+    public function destroy(GeminiAi $chat): RedirectResponse
+    {
+        $chat->delete();
+        return to_route('gemini');
+    }
 }

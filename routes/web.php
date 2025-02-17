@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/chat/gemini/{id?}', [GeminiController::class, 'index'])->name('gemini');
     Route::post('/chat/gemini/{id?}', [GeminiController::class, 'store'])->name("gemini-store");
+    Route::delete('/chat/gemini/{chat}', [GeminiController::class, 'destroy'])->name('gemini-destroy');
 });
 
 
