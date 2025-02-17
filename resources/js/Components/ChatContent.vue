@@ -1,11 +1,18 @@
 <script setup>
+import { computed } from 'vue';
+
 const props = defineProps({
     content: Object,
 });
+
+const user = computed(() => props.content?.role === 'user');
 </script>
 
 <template>
-    <div class="flex w-full py-6 text-white">
+    <div
+        class="flex w-full py-6 text-white"
+        :class="user ? 'bg-slate-800 font-bold' : 'bg-slate-700'"
+    >
         <span class="flex w-1/6 justify-end pr-4">
             <!-- {{ content }} -->
             <svg
@@ -40,8 +47,8 @@ const props = defineProps({
             </svg>
         </span>
         <section class="w-4/6 pl-4 text-left">
-            <!-- {{ content }} -->
-            {{ 'prompt' in content ? content.prompt : content.messages.text }}
+            <!-- {{ content.messages }} -->
+            {{ 'prompt' in content ? content.prompt : content.messages }}
         </section>
     </div>
 </template>

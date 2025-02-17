@@ -28,19 +28,22 @@ class GeminiController extends Controller
 
     public function store(StoreRequest $request, string $id = null): RedirectResponse
     {
-        $messages = [];
+        $prompt = Str::squish($request->prompt);
         if ($id) {
             $chat = GeminiAi::findOrFail($id);
             $messages = $chat->context;
+        } else {
+            $messages = [];
         }
 
-        $messages['infromation'] = [
+        $messages[] = [
             'role'      => 'user',
-            'prompt'     => Str::squish($request->prompt)
+            'prompt'     => $prompt
         ];
-        $messages['result'] = [
+
+        $messages[] = [
             'role' => 'assistant',
-            'messages' => GeminiAi::Gemini(data_get($messages, 'infromation.prompt'), true)[0],
+            'messages' => str_replace('*', '', GeminiAi::Gemini($prompt, true, true)),
         ];
 
         // TODO: Origanize data and try store it in en and ar if it can

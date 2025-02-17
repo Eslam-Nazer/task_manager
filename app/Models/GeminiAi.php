@@ -66,14 +66,17 @@ class GeminiAi extends Model
     /**
      * Summary of scopeGemini
      * @param string $prompt
-     * @return Gemini\Responses\GenerativeModel\GenerateContentResponse|array
+     * @return Gemini\Responses\GenerativeModel\GenerateContentResponse|array|string
      */
-    public static function Gemini(string $prompt, bool $parts = false): GenerateContentResponse|array
+    public static function Gemini(string $prompt, bool $parts = false, $onlyText = false): GenerateContentResponse|array|string
     {
         $key = getenv('GEMINI_API_KEY');
         $client = Gemini::client($key);
 
         if ($parts) {
+            if ($onlyText) {
+                return $client->geminiPro()->generateContent($prompt)->parts()[0]->text;
+            }
             return $client->geminiPro()->generateContent($prompt)->parts();
         }
 
